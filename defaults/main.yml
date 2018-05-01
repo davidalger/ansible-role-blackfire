@@ -1,0 +1,3 @@
+---
+# Set to yes / true to work around GPG verification errors on old distros
+blackfire_disable_repo_gpgcheck: no

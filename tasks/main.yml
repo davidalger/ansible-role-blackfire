@@ -1,23 +1,30 @@
 ---
-- name: Add packagecloud GPG key.
+- name: Install Blackfire repo dependencies
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - pygpgme
+    - yum-utils
+
+- name: Install packagecloud GPG key
   rpm_key:
     key: https://packagecloud.io/gpg.key
     state: present
 
-- name: Add Blackfire repository.
+- name: Install Blackfire repository
   get_url:
     url: http://packages.blackfire.io/fedora/blackfire.repo
     dest: /etc/yum.repos.d/blackfire.repo
     mode: 0644
 
-- name: Disable gpg_repocheck for non-bleeding-edge CentOS.
-  lineinfile: >
-    dest=/etc/yum.repos.d/blackfire.repo
-    regexp="^repo_gpgcheck="
-    line="repo_gpgcheck=0"
-    state=present
+- name: Enforce repo_gpgcheck for blackfire repository
+  lineinfile:
+    dest: /etc/yum.repos.d/blackfire.repo
+    regexp: "^repo_gpgcheck="
+    line: "repo_gpgcheck={{ '0' if blackfire_disable_repo_gpgcheck == true else '1' }}"
+    state: present
 
-- name: Ensure Blackfire packages are installed.
+- name: Install Blackfire packages
   package:
     name:
       - blackfire-agent
