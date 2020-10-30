@@ -36,3 +36,23 @@
     state: present
   notify:
     - restart php-fpm
+
+- name: Configure Blackfire Agent server-id
+  lineinfile:
+    path: /etc/blackfire/agent
+    regexp: '^server-id='
+    line: server-id={{ blackfire_server_id }}
+
+- name: Configure Blackfire Agent server-token
+  lineinfile:
+    path: /etc/blackfire/agent
+    regexp: '^server-token='
+    line: server-token={{ blackfire_server_token }}
+  notify:
+    - restart blackfire-agent
+
+- name: Configure blackfire-agent service
+  service:
+    name: blackfire-agent
+    state: "{{ 'started' if blackfire_agent_enabled else 'stopped' }}"
+    enabled: "{{ blackfire_agent_enabled }}"

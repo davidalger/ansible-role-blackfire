@@ -1,3 +1,10 @@
 ---
+# Set this to true when configuring the server id and server token to activate the agent
+blackfire_agent_enabled: false
+
+# The server id and server token used to authenticate with Blackfire
+blackfire_server_id:
+blackfire_server_token:
+
 # Set to true to work around GPG verification errors on old distros
 blackfire_disable_repo_gpgcheck: false
