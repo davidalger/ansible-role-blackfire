@@ -1,4 +1,27 @@
 ---
+# Assumes SELinux python tools pre-installed; these will be installed by the davidalger.selinux role
+- name: Configure SELinux so Blackfire Agent will transition into httpd_t context on startup
+  sefcontext:
+    target: "{{ item.target }}"
+    setype: "{{ item.setype }}"
+    ftype: "{{ item.ftype | default('a') }}"
+    selevel: "{{ item.selevel | default(omit) }}"
+    seuser: "{{ item.seuser | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - target: /usr/bin/blackfire-agent
+      setype: httpd_exec_t
+      state: present
+
+    - target: /var/log/blackfire/agent\.log
+      setype: httpd_log_t
+      state: present
+
+    - target: /var/run/blackfire/agent\.sock
+      setype: httpd_var_run_t
+      state: present
+  when: ('status' in ansible_selinux) and (ansible_selinux.status != 'disabled')
+
 - name: Install Blackfire dependency is installed
   package:
     name: yum-utils
