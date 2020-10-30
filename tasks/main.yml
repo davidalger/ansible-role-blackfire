@@ -1,10 +1,14 @@
 ---
-- name: Install Blackfire repo dependencies
+- name: Install Blackfire dependency is installed
   package:
-    name:
-      - pygpgme
-      - yum-utils
+    name: yum-utils
     state: present
+
+- name: Ensure extra Blackfire dependency on older EL versions is installed
+  package:
+    name: pygpgme
+    state: present
+  when: ansible_distribution_major_version | int < 8
 
 - name: Install packagecloud GPG key
   rpm_key:
