@@ -1,2 +1,20 @@
 ---
 dependencies: []
+
+galaxy_info:
+  role_name: blackfire
+  author: David Alger
+  description: Installs the Blackfire agent for application performance profiling
+  license: MIT
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: EL
+      versions:
+        - 8
+        - 7
+
+  galaxy_tags:
+    - system
+    - blackfire
+    - php

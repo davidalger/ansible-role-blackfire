@@ -1,10 +1,10 @@
 ---
 - name: Install Blackfire repo dependencies
-  yum:
-    name: "{{ item }}"
-  with_items:
-    - pygpgme
-    - yum-utils
+  package:
+    name:
+      - pygpgme
+      - yum-utils
+    state: present
 
 - name: Install packagecloud GPG key
   rpm_key:
@@ -21,7 +21,7 @@
   lineinfile:
     dest: /etc/yum.repos.d/blackfire.repo
     regexp: "^repo_gpgcheck="
-    line: "repo_gpgcheck={{ '0' if blackfire_disable_repo_gpgcheck == true else '1' }}"
+    line: "repo_gpgcheck={{ '0' if blackfire_disable_repo_gpgcheck else '1' }}"
     state: present
 
 - name: Install Blackfire packages
